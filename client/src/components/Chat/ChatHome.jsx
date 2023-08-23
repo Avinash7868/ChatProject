@@ -1,20 +1,9 @@
 import React from "react";
-// import "./ChatHome.css";
-import { Row, Col, Button } from "react-bootstrap";
+import { Row, Col, Button, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { gql } from "@apollo/client";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { fetchAllChatUsers } from "../../store/slice/ChatSlice";
-// const QUERY_ALL_CHAT_USERS = gql`
-//   query AllChatUsers {
-//     AllChatUsers {
-//       name
-//       email
-//       createdAt
-//     }
-//   }
-// `;
 
 const ChatHome = () => {
   const { chatUsers } = useSelector((state) => state.chat);
@@ -30,7 +19,7 @@ const ChatHome = () => {
     localStorage.removeItem("user");
     window.location.href = "/login";
   };
-
+  //list-group-item
   let userMarkup;
   if (!chatUsers) {
     userMarkup = <p>Loading...</p>;
@@ -38,9 +27,22 @@ const ChatHome = () => {
     userMarkup = <p>No users have joined yet</p>;
   } else if (chatUsers.length > 0) {
     userMarkup = chatUsers.map((user) => (
-      <li className="list-group-item" key={user.name}>
-        {user.name}
-      </li>
+      <div className="d-flex p-3" key={user.name}>
+        <Image
+          src={user.img}
+          roundedCircle
+          className="mr-2"
+          style={{ width: "50px", height: "50px", objectFit: "cover" }}
+        />
+        <div>
+          <p className="text-success">{user.name}</p>
+          <p className="">
+            {user.latestMessage
+              ? user.latestMessage.content
+              : "You are now connected!"}
+          </p>
+        </div>
+      </div>
     ));
   }
 

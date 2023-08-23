@@ -20,7 +20,7 @@ export class ChatService {
         $or: [{ From: loggedInUserName }, { To: loggedInUserEmail }],
       })
       .sort({ createdAt: -1 });
-    console.log('chat', chat);
+    // console.log('chat', chat);
     // Below I am looping through all the users and adding the last message to each user
     for (let i = 0; i < users.length; i++) {
       const user = users[i];
