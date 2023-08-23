@@ -1,0 +1,34 @@
+/* userData.css (you can name the CSS file as per your project convention) */
+
+.userTableContainer {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.table th,
+.table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid #ddd;
+}
+
+.table thead {
+  background-color: #f2f2f2;
+}
+
+.table th {
+  text-align: left;
+}
+
+.table .tableBodyRow:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.table .tableBodyRow:hover {
+  background-color: #e6e6e6;
+}
