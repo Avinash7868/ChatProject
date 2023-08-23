@@ -1,5 +1,6 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Chat } from '../../chat/entities/chat.entity';
 
 @Schema({
   timestamps: true,
@@ -20,6 +21,10 @@ export class User {
   @Prop({ unique: true })
   @Field()
   email: string;
+
+  // @Prop()
+  @Field({ nullable: true })
+  latestMessage?: Chat;
 
   @Prop()
   @Field()

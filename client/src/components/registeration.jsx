@@ -25,48 +25,50 @@ const Registration = () => {
 
   return (
     <div className="registration">
-      <h1>Registration</h1>
-      <div className="form-group">
-        <label className="label">Name:</label>
-        <input
-          type="text"
-          className="input"
-          placeholder="Enter your name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-      </div>
+      <form className="form">
+        <h1>Registration</h1>
+        <div className="form-group">
+          <label className="label">Name:</label>
+          <input
+            type="text"
+            className="input"
+            placeholder="Enter your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+        </div>
 
-      <div className="form-group">
-        <label className="label">Email:</label>
-        <input
-          type="email"
-          className="input"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
+        <div className="form-group">
+          <label className="label">Email:</label>
+          <input
+            type="email"
+            className="input"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
 
-      <div className="form-group">
-        <label className="label">Password:</label>
-        <input
-          type="password"
-          className="input"
-          placeholder="Enter your password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
+        <div className="form-group">
+          <label className="label">Password:</label>
+          <input
+            type="password"
+            className="input"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
 
-      <button className="button" onClick={handleRegister}>
-        Register
-      </button>
-      <button className="button">
-        <Link to="http://localhost:5173/login" className="link2">
-          Login?
-        </Link>
-      </button>
+        <button className="button" onClick={handleRegister}>
+          Register
+        </button>
+        <button className="button">
+          <Link to="http://localhost:5173/login" className="link2">
+            Login?
+          </Link>
+        </button>
+      </form>
     </div>
   );
 };

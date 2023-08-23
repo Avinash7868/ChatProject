@@ -7,7 +7,13 @@ const QUERY_ALL_CHAT_USERS = gql`
   query AllChatUsers {
     AllChatUsers {
       name
-      email
+      img
+      latestMessage {
+        content
+        From
+        To
+        createdAt
+      }
       createdAt
     }
   }
@@ -20,7 +26,7 @@ export const fetchAllChatUsers = createAsyncThunk(
     const response = await apolloClient.query({
       query: QUERY_ALL_CHAT_USERS,
     });
-    // console.log("api called");
+    console.log("api called");
     return response.data.AllChatUsers;
   }
 );

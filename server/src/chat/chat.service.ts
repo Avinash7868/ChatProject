@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateChatInput } from './dto/create-chat.input';
-import { UpdateChatInput } from './dto/update-chat.input';
+// import { UpdateChatInput } from './dto/update-chat.input';
 import { UserService } from '../user/user.service';
 import { InjectModel } from '@nestjs/mongoose';
 import { Chat } from './entities/chat.entity';
@@ -13,8 +13,28 @@ export class ChatService {
     @InjectModel(Chat.name) private readonly chatModel: mongoose.Model<Chat>,
   ) {}
 
-  findAllChatUsers(loggedInUserEmail: string) {
-    return this.userService.findAll2(loggedInUserEmail);
+  async findAllChatUsers(loggedInUserEmail: string, loggedInUserName: string) {
+    let users = await this.userService.findAll2(loggedInUserEmail);
+    const chat = await this.chatModel
+      .find({
+        $or: [{ From: loggedInUserName }, { To: loggedInUserEmail }],
+      })
+      .sort({ createdAt: -1 });
+    console.log('chat', chat);
+    // Below I am looping through all the users and adding the last message to each user
+    for (let i = 0; i < users.length; i++) {
+      const user = users[i];
+      // Below I am filtering the chat array to get the last message between the logged in user and the user in the loop
+      const lastMessage = chat.filter(
+        (c) =>
+          (c.From === user.name && c.To === loggedInUserName) ||
+          (c.From === loggedInUserName && c.To === user.name),
+      );
+      // Below I am adding the last message to the user in the loop
+      user.latestMessage = lastMessage[0];
+    }
+
+    return users;
   }
 
   findAll() {

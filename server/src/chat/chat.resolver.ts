@@ -17,7 +17,12 @@ export class ChatResolver {
   async findAllChatUsers(@Context() context: any) {
     // Below I am getting the logged in user email from the context/Token
     const loggedInUserEmail = context.req.user.email;
-    return this.chatService.findAllChatUsers(loggedInUserEmail);
+    const loggedInUserName = context.req.user.name;
+    let users = await this.chatService.findAllChatUsers(
+      loggedInUserEmail,
+      loggedInUserName,
+    );
+    return users;
   }
 
   //*******************Below is the mutation to send message******************

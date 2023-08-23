@@ -6,15 +6,15 @@ import { gql } from "@apollo/client";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { fetchAllChatUsers } from "../../store/slice/ChatSlice";
-const QUERY_ALL_CHAT_USERS = gql`
-  query AllChatUsers {
-    AllChatUsers {
-      name
-      email
-      createdAt
-    }
-  }
-`;
+// const QUERY_ALL_CHAT_USERS = gql`
+//   query AllChatUsers {
+//     AllChatUsers {
+//       name
+//       email
+//       createdAt
+//     }
+//   }
+// `;
 
 const ChatHome = () => {
   const { chatUsers } = useSelector((state) => state.chat);
@@ -30,18 +30,43 @@ const ChatHome = () => {
     localStorage.removeItem("user");
     window.location.href = "/login";
   };
+
+  let userMarkup;
+  if (!chatUsers) {
+    userMarkup = <p>Loading...</p>;
+  } else if (chatUsers.length === 0) {
+    userMarkup = <p>No users have joined yet</p>;
+  } else if (chatUsers.length > 0) {
+    userMarkup = chatUsers.map((user) => (
+      <li className="list-group-item" key={user.name}>
+        {user.name}
+      </li>
+    ));
+  }
+
   return (
-    <Row className="justify-content-around bg-white">
-      <Link to="/login">
-        <Button variant="link">Login</Button>
-      </Link>
-      <Link to="/">
-        <Button variant="link">Register</Button>
-      </Link>
-      <Button variant="dark" onClick={handleLogout}>
-        Logout
-      </Button>
-    </Row>
+    <>
+      <Row className="justify-content-around mb-2 bg-dark">
+        <Link to="/login">
+          <Button variant="link">Login</Button>
+        </Link>
+        <Link to="/">
+          <Button variant="link">Register</Button>
+        </Link>
+        <Button variant="dark" onClick={handleLogout}>
+          Logout
+        </Button>
+      </Row>
+      <Row className="">
+        <Col xs={4}>
+          <h1 className="text-center">Chat Home</h1>
+          <ul className="list-group">{userMarkup}</ul>
+        </Col>
+        <Col xs={8}>
+          <h1 className="text-center">Chat</h1>
+        </Col>
+      </Row>
+    </>
   );
 };
 

@@ -18,8 +18,12 @@ export class UserService {
     return this.userModel.find();
   }
 
-  findAll2(excludeUserEmail: string) {
-    return this.userModel.find({ email: { $ne: excludeUserEmail } });
+  async findAll2(excludeUserEmail: string) {
+    //Below i am excluding the logged in user from the list of users
+    let chatuser = this.userModel.find({ email: { $ne: excludeUserEmail } });
+    //Below i am getting all the messages between the logged in user and other users in descending order
+
+    return chatuser;
   }
 
   findOne(id: string) {

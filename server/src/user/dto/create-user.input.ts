@@ -6,6 +6,8 @@ import {
   IsNotEmpty,
   IsString,
 } from 'class-validator';
+import { Chat } from '../../chat/entities/chat.entity';
+import { CreateChatInput2 } from '../../chat/dto/create-chat.input';
 
 @InputType()
 export class CreateUserInput {
@@ -23,6 +25,9 @@ export class CreateUserInput {
   @IsString()
   @Field(() => String, { description: 'Enter your email' })
   email: string;
+
+  @Field({ nullable: true })
+  latestMessage: CreateChatInput2;
 
   @IsString()
   @Field(() => String, { description: 'Enter your password' })
