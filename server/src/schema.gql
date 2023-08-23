@@ -1,0 +1,71 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  _id: String
+  img: String
+  name: String!
+  email: String!
+  password: String!
+  privateKey: String
+  createdAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type LoginResponse {
+  user: String!
+  email: String!
+  token: String
+}
+
+type Chat {
+  _id: String!
+  content: String!
+  From: String
+  To: String!
+  createdAt: DateTime!
+}
+
+scalar JSONObject
+
+type Query {
+  users: [User!]!
+  userone(id: String!): User!
+  userByEmail(email: String!): User!
+  userByEmailAndPassword(email: String!, password: String!): User!
+  AllChatUsers: [User!]!
+  AllChat: [Chat!]!
+  MessagesBetweenTwoUsers(To: String!): [Chat!]!
+}
+
+type Mutation {
+  login(email: String!, password: String!): LoginResponse!
+  createUser(createUserInput: CreateUserInput!): User!
+  removeUser(id: String!): User!
+  sendMessage(createChatInput: CreateChatInput!): Chat!
+}
+
+input CreateUserInput {
+  img: String
+
+  """Enter your name"""
+  name: String!
+
+  """Enter your email"""
+  email: String!
+
+  """Enter your password"""
+  password: String!
+  privateKey: String
+}
+
+input CreateChatInput {
+  content: String!
+  From: String
+  To: String!
+}
