@@ -24,6 +24,7 @@ const MUTATION_REGISTER_USER = gql`
       name
       email
       password
+      img
     }
   }
 `;
@@ -59,12 +60,18 @@ export const fetchUsers = createAsyncThunk("user/fetchUsers", async () => {
 //Below I created this action creator to register a user using the mutation
 export const registerUser = createAsyncThunk(
   "user/registerUser",
+
   async (createUserInput) => {
-    const response = await apolloClient.mutate({
-      mutation: MUTATION_REGISTER_USER,
-      variables: { createUserInput },
-    });
-    return response.data.createUser;
+    try {
+      const response = await apolloClient.mutate({
+        mutation: MUTATION_REGISTER_USER,
+        variables: { createUserInput },
+      });
+      return response.data.createUser;
+    } catch (error) {
+      console.log(error.message);
+      alert("User already exists");
+    }
   }
 );
 

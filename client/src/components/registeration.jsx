@@ -10,14 +10,22 @@ const Registration = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [Image, setImage] = useState("");
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleRegister = () => {
+    console.log(Image);
+    //Below is the fakepath of the image and change it to the image name
+    const img = Image.split("\\")[2];
+    console.log(img);
+
     const userData = {
       name,
       email,
       password,
+      img,
     };
     dispatch(registerUser(userData));
     navigate("/login");
@@ -57,6 +65,16 @@ const Registration = () => {
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
+          <label className="label">Image:</label>
+          <input
+            type="file"
+            className="input"
+            placeholder="Enter your image"
+            // value={Image}
+            onChange={(e) => setImage(e.target.value)}
           />
         </div>
 

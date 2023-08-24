@@ -13,28 +13,81 @@ export class ChatService {
     @InjectModel(Chat.name) private readonly chatModel: mongoose.Model<Chat>,
   ) {}
 
-  async findAllChatUsers(loggedInUserEmail: string, loggedInUserName: string) {
-    let users = await this.userService.findAll2(loggedInUserEmail);
-    const chat = await this.chatModel
-      .find({
-        $or: [{ From: loggedInUserName }, { To: loggedInUserEmail }],
-      })
-      .sort({ createdAt: -1 });
-    // console.log('chat', chat);
-    // Below I am looping through all the users and adding the last message to each user
-    for (let i = 0; i < users.length; i++) {
-      const user = users[i];
-      // Below I am filtering the chat array to get the last message between the logged in user and the user in the loop
-      const lastMessage = chat.filter(
-        (c) =>
-          (c.From === user.name && c.To === loggedInUserName) ||
-          (c.From === loggedInUserName && c.To === user.name),
-      );
-      // Below I am adding the last message to the user in the loop
-      user.latestMessage = lastMessage[0];
-    }
+  // async findAllChatUsers(loggedInUserEmail: string, loggedInUserName: string) {
+  //   let users = await this.userService.findAll2(loggedInUserEmail);
+  //   const chat = await this.chatModel
+  //     .find({
+  //       $or: [{ From: loggedInUserName }, { To: loggedInUserName }],
+  //     })
+  //     .sort({ createdAt: -1 });
+  //   console.log('chat', chat);
+  //   // Below I am looping through all the users and adding the last message to each user
+  //   for (let i = 0; i < users.length; i++) {
+  //     const user = users[i];
+  //     // Below I am filtering the chat array to get the last message between the logged in user and the user in the loop
+  //     const lastMessage = chat.filter(
+  //       (c) =>
+  //         (c.From === user.name && c.To === loggedInUserName) ||
+  //         (c.From === loggedInUserName && c.To === user.name),
+  //     );
+  //     // Below I am adding the last message to the user in the loop
+  //     console.log('lastMessage', lastMessage);
+  //     user.latestMessage = lastMessage[0];
+  //   }
 
-    return users;
+  //   return users;
+  // }
+  async findAllChatUsers(loggedInUserEmail: string, loggedInUserName: string) {
+    const users = await this.userService.findAll2(loggedInUserEmail);
+
+    // let pipeline = [
+    //   {
+    //     $match: {
+    //       $or: [{ From: loggedInUserName }, { To: loggedInUserName }],
+    //     },
+    //   },
+    //   {
+    //     $sort: { createdAt: -1 },
+    //   },
+    //   {
+    //     $group: {
+    //       _id: {
+    //         $cond: [{ $eq: ['$From', loggedInUserName] }, '$To', '$From'],
+    //       },
+    //       latestMessage: { $first: '$$ROOT' },
+    //     },
+    //   },
+    // ];
+
+    const latestMessages = await this.chatModel.aggregate([
+      {
+        $match: {
+          $or: [{ From: loggedInUserName }, { To: loggedInUserName }],
+        },
+      },
+      {
+        $sort: { createdAt: -1 },
+      },
+      {
+        $group: {
+          _id: {
+            $cond: [{ $eq: ['$From', loggedInUserName] }, '$To', '$From'],
+          },
+          latestMessage: { $first: '$$ROOT' },
+        },
+      },
+    ]);
+    console.log('latestMessages', latestMessages);
+
+    const userWithLatestMessages = users.map((user) => {
+      const latestMessage = latestMessages.find(
+        (message) => message._id === user.name,
+      );
+      user.latestMessage = latestMessage ? latestMessage.latestMessage : null;
+      return user;
+    });
+    console.log('userWithLatestMessages', userWithLatestMessages);
+    return userWithLatestMessages;
   }
 
   findAll() {

@@ -29,7 +29,7 @@ const ChatHome = () => {
     userMarkup = chatUsers.map((user) => (
       <div className="d-flex p-3" key={user.name}>
         <Image
-          src={user.img}
+          src={user.img || "image.jpg"}
           roundedCircle
           className="mr-2"
           style={{ width: "50px", height: "50px", objectFit: "cover" }}

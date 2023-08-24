@@ -6,7 +6,7 @@ import {
   IsNotEmpty,
   IsString,
 } from 'class-validator';
-import { Chat } from '../../chat/entities/chat.entity';
+// import { Chat } from '../../chat/entities/chat.entity';
 import { CreateChatInput2 } from '../../chat/dto/create-chat.input';
 
 @InputType()
