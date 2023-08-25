@@ -20,6 +20,17 @@ const Registration = () => {
     //Below is the fakepath of the image and change it to the image name
     const img = Image.split("\\")[2];
     console.log(img);
+    if (!name || !email || !password || !Image) {
+      alert("Please fill all the fields");
+      return;
+    }
+    if (password.length < 6) {
+      alert("Password must be atleast 6 characters long");
+      return;
+    } else if (!email.includes("@")) {
+      alert("Please enter a valid email");
+      return;
+    }
 
     const userData = {
       name,

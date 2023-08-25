@@ -1,4 +1,11 @@
-import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Context,
+  Subscription,
+} from '@nestjs/graphql';
 import { ChatService } from './chat.service';
 import { Chat } from './entities/chat.entity';
 import { CreateChatInput } from './dto/create-chat.input';
@@ -6,6 +13,7 @@ import { User } from '../user/entities/user.entity';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/auth.guard';
 import { UserInputError } from '@nestjs/apollo';
+// import { PubSub } from 'graphql-subscriptions';
 
 @Resolver(() => Chat)
 export class ChatResolver {
@@ -91,4 +99,13 @@ export class ChatResolver {
     const chat = await this.chatService.findMessagesBetweenTwoUsers(From, To);
     return chat;
   }
+
+  //*****Below are all the subscription ***
+  // @UseGuards(JwtAuthGuard)
+  // @Subscription(() => Chat, {
+  //   name: 'NewMessage',
+  // })
+  // NewMessageSubscription() {
+  //   return this.pubSub.asyncIterator(['NewMessage']);
+  // }
 }

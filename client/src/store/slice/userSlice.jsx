@@ -29,17 +29,6 @@ const MUTATION_REGISTER_USER = gql`
   }
 `;
 
-//Defining the GraphQL query to login a user
-// const QUERY_LOGIN_USER = gql`
-//   query userByEmailAndPassword($email: String!, $password: String!) {
-//     userByEmailAndPassword(email: $email, password: $password) {
-//       name
-//       email
-//       password
-//     }
-//   }
-// `;
-
 const MUTATION_LOGIN_USER = gql`
   mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
@@ -110,8 +99,10 @@ if (token) {
 
 // ***************************************************************************
 //Below -> Creating  the initial state
+// persist the login user in the local storage
+const user2 = localStorage.getItem("user");
 const initialState = {
-  LoginUser: {},
+  LoginUser: user2 || {},
   data: [],
   loading: false,
   error: null,
@@ -156,7 +147,6 @@ const userSlice = createSlice({
       })
       .addCase(loginUserMutation.fulfilled, (state, action) => {
         state.loading = false;
-        // state.token = action.payload.token;
         localStorage.setItem("token", action.payload.token);
         localStorage.setItem("user", action.payload.user);
         state.LoginUser = action.payload;

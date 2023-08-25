@@ -40,25 +40,6 @@ export class ChatService {
   async findAllChatUsers(loggedInUserEmail: string, loggedInUserName: string) {
     const users = await this.userService.findAll2(loggedInUserEmail);
 
-    // let pipeline = [
-    //   {
-    //     $match: {
-    //       $or: [{ From: loggedInUserName }, { To: loggedInUserName }],
-    //     },
-    //   },
-    //   {
-    //     $sort: { createdAt: -1 },
-    //   },
-    //   {
-    //     $group: {
-    //       _id: {
-    //         $cond: [{ $eq: ['$From', loggedInUserName] }, '$To', '$From'],
-    //       },
-    //       latestMessage: { $first: '$$ROOT' },
-    //     },
-    //   },
-    // ];
-
     const latestMessages = await this.chatModel.aggregate([
       {
         $match: {
@@ -77,7 +58,7 @@ export class ChatService {
         },
       },
     ]);
-    console.log('latestMessages', latestMessages);
+    // console.log('latestMessages', latestMessages);
 
     const userWithLatestMessages = users.map((user) => {
       const latestMessage = latestMessages.find(
@@ -86,7 +67,7 @@ export class ChatService {
       user.latestMessage = latestMessage ? latestMessage.latestMessage : null;
       return user;
     });
-    console.log('userWithLatestMessages', userWithLatestMessages);
+    // console.log('userWithLatestMessages', userWithLatestMessages);
     return userWithLatestMessages;
   }
 
@@ -107,7 +88,7 @@ export class ChatService {
       .sort({ createdAt: -1 })
       .skip(skipAmount)
       .limit(20);
-    return chat;
+    return chat.reverse();
   }
 
   findRecipient(UserName: string) {
