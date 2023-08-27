@@ -24,6 +24,7 @@ import { ChatModule } from './chat/chat.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      installSubscriptionHandlers: true,
       subscriptions: {
         'graphql-ws': true,
         'subscriptions-transport-ws': true,

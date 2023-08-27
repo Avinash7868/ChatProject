@@ -13,11 +13,13 @@ import { User } from '../user/entities/user.entity';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/auth.guard';
 import { UserInputError } from '@nestjs/apollo';
-// import { PubSub } from 'graphql-subscriptions';
+import { PubSub, withFilter } from 'graphql-subscriptions';
+// import { JwtSubscriptionsGuard } from '../auth/subsription.auth.guard';
 
 @Resolver(() => Chat)
 export class ChatResolver {
   constructor(private readonly chatService: ChatService) {}
+  private pubsub = new PubSub();
 
   //******************Below is the query to get all the users for chat except the logged in user*********
   @UseGuards(JwtAuthGuard)
@@ -63,7 +65,14 @@ export class ChatResolver {
     }
 
     createChatInput.From = loggedInUserUser;
-    return this.chatService.SendMessage(createChatInput);
+    const sentMessage = await this.chatService.SendMessage(createChatInput);
+
+    // Below I am publishing the message to the subscription so that the recipient can get the message but only the logged in user's message so i am using withFilter and passing the loggedInUserUser's name
+    this.pubsub.publish('NewMessage', {
+      NewMessage: sentMessage,
+    });
+
+    return sentMessage;
   }
   //Below is the query to get all the messages
   @UseGuards(JwtAuthGuard)
@@ -101,11 +110,38 @@ export class ChatResolver {
   }
 
   //*****Below are all the subscription ***
-  // @UseGuards(JwtAuthGuard)
+
   // @Subscription(() => Chat, {
+  //   filter: (payload, variables) => {
+  //     if (
+  //       payload.loggedInUserUser === payload.NewMessage.To ||
+  //       payload.loggedInUserUser === payload.NewMessage.From
+  //     ) {
+  //       return true;
+  //     }
+  //     return false;
+  //   },
   //   name: 'NewMessage',
   // })
-  // NewMessageSubscription() {
-  //   return this.pubSub.asyncIterator(['NewMessage']);
+  // NewMessage() {
+  //   return this.pubsub.asyncIterator(['NewMessage']);
   // }
+
+  // Below I am using withFilter to filter the messages so that only the sender and recipient can get the message if the sender and recipient are logged in
+  @Subscription(() => Chat, {
+    name: 'NewMessage',
+  })
+  NewMessage(@Args('loggedInUser') loggedInUser: string) {
+    return withFilter(
+      () => this.pubsub.asyncIterator(['NewMessage']),
+      (payload) => {
+        // console.log(payload, 'payload');
+        // console.log(loggedInUser, 'loggedInUser');
+        return (
+          payload.NewMessage.From === loggedInUser ||
+          payload.NewMessage.To === loggedInUser
+        );
+      },
+    )(loggedInUser);
+  }
 }

@@ -79,3 +79,7 @@ input CreateChatInput {
   From: String
   To: String!
 }
+
+type Subscription {
+  NewMessage(loggedInUser: String!): Chat!
+}

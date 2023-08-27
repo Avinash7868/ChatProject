@@ -19,6 +19,10 @@ const authLink = setContext((_, { headers }) => {
 const wsLink = new GraphQLWsLink(
   createClient({
     url: "ws://localhost:5000/graphql",
+    options: {
+      reconnect: true,
+      // lazy: true,
+    },
   })
 );
 const httpLink = new HttpLink({

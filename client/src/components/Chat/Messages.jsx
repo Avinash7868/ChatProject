@@ -44,7 +44,7 @@ const Messages = () => {
     }
 
     messageMarkup = chatMessages.map((message) => (
-      <Message key={message._id} message={message} />
+      <Message key={message._id} mykey={message._id} message={message} />
     ));
   }
 

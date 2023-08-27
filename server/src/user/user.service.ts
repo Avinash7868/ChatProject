@@ -1,9 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { CreateUserInput } from './dto/create-user.input';
 import * as mongoose from 'mongoose';
 import { User } from './entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
-
 @Injectable()
 export class UserService {
   constructor(
