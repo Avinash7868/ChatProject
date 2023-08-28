@@ -6,23 +6,14 @@ import { Link } from "react-router-dom";
 import Users from "./Users";
 import Messages from "./Messages";
 import { useSubscription } from "@apollo/client";
-import { gql } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import { SetSubscriptionMessages } from "../../store/slice/ChatSlice";
-const NEW_MESSAGE = gql`
-  subscription newMessage($loggedInUser: String!) {
-    NewMessage(loggedInUser: $loggedInUser) {
-      _id
-      content
-      From
-      To
-      createdAt
-    }
-  }
-`;
+import { NEW_MESSAGE } from "../../store/api/Subscription";
+import { notification } from "antd";
 
 const ChatHome = () => {
   const user = localStorage.getItem("user");
+  const [api, contextHolder] = notification.useNotification();
   console.log(user, "user");
   const { data: messageData, error: messageError } = useSubscription(
     NEW_MESSAGE,
@@ -38,6 +29,14 @@ const ChatHome = () => {
     if (messageData) {
       console.log("Message From Subscription ", messageData);
       dispatch(SetSubscriptionMessages(messageData.NewMessage));
+      if (messageData.NewMessage.From !== user) {
+        api.open({
+          icon: <i class="fa-sharp fa-regular fa-message fa-bounce"></i>,
+          message: "Message From " + messageData.NewMessage.From,
+          description: messageData.NewMessage.content,
+          duration: 4,
+        });
+      }
     }
   }, [messageData, messageError]);
 
@@ -49,6 +48,7 @@ const ChatHome = () => {
 
   return (
     <>
+      {contextHolder}
       <Row className=" d-block-flex mb-2 bg-success m-0">
         <Link>
           <Button variant="" onClick={handleLogout}>

@@ -6,10 +6,10 @@ import { useState, useEffect } from "react";
 import { setSelectedUser } from "../../store/slice/ChatSlice";
 import classNames from "classnames";
 import "./ChatHome.scss";
+
 const Users = () => {
   const { selectedUser } = useSelector((state) => state.chat);
   const { chatUsers } = useSelector((state) => state.chat);
-  console.log(chatUsers);
 
   const dispatch = useDispatch();
 
@@ -23,7 +23,7 @@ const Users = () => {
   if (!chatUsers) {
     userMarkup = <p>Loading...</p>;
   } else if (chatUsers.length === 0) {
-    userMarkup = <p>No users have joined yet</p>;
+    userMarkup = <p>Loading......</p>;
   } else if (chatUsers.length > 0) {
     //Below code is for displaying all users
     userMarkup = chatUsers.map((user) => (
