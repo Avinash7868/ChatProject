@@ -7,7 +7,8 @@ import Users from "./Users";
 import Messages from "./Messages";
 import { useSubscription } from "@apollo/client";
 import { gql } from "@apollo/client";
-
+import { useDispatch, useSelector } from "react-redux";
+import { SetSubscriptionMessages } from "../../store/slice/ChatSlice";
 const NEW_MESSAGE = gql`
   subscription newMessage($loggedInUser: String!) {
     NewMessage(loggedInUser: $loggedInUser) {
@@ -29,13 +30,14 @@ const ChatHome = () => {
       variables: { loggedInUser: user },
     }
   );
-
+  const dispatch = useDispatch();
   useEffect(() => {
     if (messageError) {
       console.log(messageError);
     }
     if (messageData) {
       console.log("Message From Subscription ", messageData);
+      dispatch(SetSubscriptionMessages(messageData.NewMessage));
     }
   }, [messageData, messageError]);
 

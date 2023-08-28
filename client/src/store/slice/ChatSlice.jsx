@@ -43,6 +43,19 @@ export const MUTATION_SEND_MESSAGE = gql`
   }
 `;
 
+//Below is the subscription query to listen to new messages
+// export const SUBSCRIPTION_NEW_MESSAGE = gql`
+//   subscription newMessage($loggedInUser: String!) {
+//     NewMessage(loggedInUser: $loggedInUser) {
+//       _id
+//       content
+//       From
+//       To
+//       createdAt
+//     }
+//   }
+// `;
+
 // ******************************************actions********************************
 export const fetchAllChatUsers = createAsyncThunk(
   "chat/fetchAllChatUsers",
@@ -61,6 +74,7 @@ export const fetchAllMessagesBetweenTwoUsers = createAsyncThunk(
     const response = await apolloClient.query({
       query: QUERY_ALL_MESSAGES_BETWEEN_TWO_USERS,
       variables: { To },
+      fetchPolicy: "network-only",
     });
     console.log("Chat Message Api called");
     return response.data.MessagesBetweenTwoUsers;
@@ -79,6 +93,22 @@ export const sendMessage = createAsyncThunk(
   }
 );
 
+// export const newMessageSubscription = createAsyncThunk(
+//   "chat/newMessageSubscription",
+//   async (loggedInUser) => {
+//     try {
+//       const response = apolloClient.subscribe({
+//         query: SUBSCRIPTION_NEW_MESSAGE,
+//         variables: { loggedInUser },
+//       });
+//       console.log("Chat Message Subscription called");
+//       return response.data.NewMessage;
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   }
+// );
+
 //Intial State
 const initialState = {
   chatUsers: [],
@@ -86,6 +116,7 @@ const initialState = {
   selectedUser: null,
   loading: false,
   error: null,
+  Sub: [],
 };
 
 //Slice for Chat
@@ -95,6 +126,27 @@ const chatSlice = createSlice({
   reducers: {
     setSelectedUser: (state, action) => {
       state.selectedUser = action.payload;
+    },
+    SetSubscriptionMessages: (state, action) => {
+      const userCopy = [...state.chatUsers];
+
+      const userIndex = userCopy.findIndex(
+        (user) =>
+          user.name === action.payload.To || user.name === action.payload.From
+      );
+      userCopy[userIndex].latestMessage = action.payload;
+      state.chatUsers = userCopy;
+      // const userIndex2 = userCopy.findIndex(
+      //   (user) => user.name === action.payload.To
+      // );
+      if (
+        state.selectedUser === action.payload.To ||
+        state.selectedUser === action.payload.From
+      ) {
+        state.chatMessages = [...state.chatMessages, action.payload];
+      }
+      state.Sub = action.payload;
+      state.loading = false;
     },
   },
   extraReducers: (builder) => {
@@ -117,7 +169,8 @@ const chatSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchAllMessagesBetweenTwoUsers.fulfilled, (state, action) => {
-        state.chatMessages = action.payload;
+        state.chatMessages = [...action.payload];
+
         state.loading = false;
       })
       .addCase(fetchAllMessagesBetweenTwoUsers.rejected, (state, action) => {
@@ -131,13 +184,13 @@ const chatSlice = createSlice({
         state.loading = true;
       })
       .addCase(sendMessage.fulfilled, (state, action) => {
-        const userCopy = [...state.chatUsers];
-        const userIndex = userCopy.findIndex(
-          (user) => user.name === action.payload.To
-        );
-        userCopy[userIndex].latestMessage = action.payload;
-        state.chatMessages = [...state.chatMessages, action.payload];
-        state.chatUsers = userCopy;
+        // const userCopy = [...state.chatUsers];
+        // const userIndex = userCopy.findIndex(
+        //   (user) => user.name === action.payload.To
+        // );
+        // userCopy[userIndex].latestMessage = action.payload;
+        // // state.chatMessages = [...state.chatMessages, action.payload];
+        // state.chatUsers = userCopy;
         state.loading = false;
       })
       .addCase(sendMessage.rejected, (state, action) => {
@@ -148,4 +201,5 @@ const chatSlice = createSlice({
   },
 });
 export const { setSelectedUser } = chatSlice.actions;
+export const { SetSubscriptionMessages } = chatSlice.actions;
 export default chatSlice.reducer;
