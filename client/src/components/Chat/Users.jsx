@@ -1,21 +1,28 @@
 import React from "react";
 import { fetchAllChatUsers } from "../../store/slice/ChatSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { Row, Col, Button, Image, Nav } from "react-bootstrap";
+import { Col, Image } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { setSelectedUser } from "../../store/slice/ChatSlice";
 import classNames from "classnames";
-import "./ChatHome.scss";
+import { Popover } from "antd";
+import moment from "moment";
 
 const Users = () => {
   const { selectedUser } = useSelector((state) => state.chat);
   const { chatUsers } = useSelector((state) => state.chat);
+  const [content, setContent] = useState();
 
+  console.log("chatUsers", chatUsers);
+  const handleChatUser = (e) => {
+    console.log("content", content);
+  };
   const dispatch = useDispatch();
 
   //Below code is for fetching all users
   useEffect(() => {
     dispatch(fetchAllChatUsers());
+    handleChatUser();
   }, [dispatch]);
 
   //Below code is for selecting a user and displaying messages and user details
@@ -23,8 +30,10 @@ const Users = () => {
   if (!chatUsers) {
     userMarkup = <p>Loading...</p>;
   } else if (chatUsers.length === 0) {
-    userMarkup = <p>Loading......</p>;
+    userMarkup = <p className="d-flex justify-content-around">Loading...</p>;
   } else if (chatUsers.length > 0) {
+    const latestMessages = chatUsers.map((user) => user.latestMessage);
+    console.log("latestMessages", latestMessages);
     //Below code is for displaying all users
     userMarkup = chatUsers.map((user) => (
       <div
@@ -35,7 +44,24 @@ const Users = () => {
         key={user.name}
         onClick={() => dispatch(setSelectedUser(user.name))}
       >
-        <Image src={user.img || "image.jpg"} className="userProfileImage" />
+        <Popover
+          content={
+            <div>
+              <p>
+                <Image
+                  src={user.img || "image.jpg"}
+                  className="userImagePopover"
+                />
+              </p>
+              <p>Living</p>
+            </div>
+          }
+          title={user.name}
+          trigger="hover"
+          placement="topLeft"
+        >
+          <Image src={user.img || "image.jpg"} className="userProfileImage" />
+        </Popover>
 
         <div role="button" className="d-none d-md-block ml-2">
           <p className="text-greeen m-0 ms-2">{user.name}</p>
@@ -43,6 +69,17 @@ const Users = () => {
             {user.latestMessage
               ? user.latestMessage.content
               : "You are now connected!"}
+
+            <small className="user-list-time">
+              {" "}
+              {user.latestMessage &&
+                moment(user.latestMessage.createdAt).calendar(null, {
+                  sameDay: "hh:mm a",
+                  lastDay: "[Yesterday]",
+                  lastWeek: "[Last] dddd",
+                  sameElse: "DD/MM/YYYY",
+                })}
+            </small>
           </p>
         </div>
       </div>

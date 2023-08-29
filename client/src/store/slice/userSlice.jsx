@@ -56,6 +56,7 @@ export const registerUser = createAsyncThunk(
         mutation: MUTATION_REGISTER_USER,
         variables: { createUserInput },
       });
+      window.location.href = "/login";
       return response.data.createUser;
     } catch (error) {
       console.log(error.message);

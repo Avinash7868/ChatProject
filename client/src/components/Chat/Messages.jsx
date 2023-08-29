@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
-import { Row, Col, Button, Image, Nav, Form } from "react-bootstrap";
-import "./ChatHome.scss";
+import { Col, Button, Form } from "react-bootstrap";
 import Message from "./Message";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -51,7 +50,7 @@ const Messages = () => {
   return (
     <>
       <Col xs={10} md={8}>
-        <div className="messages-box d-felx  ">{messageMarkup}</div>
+        <div className="messages-box d-felx">{messageMarkup}</div>
         <div className="px-3 py-2">
           <Form onSubmit={handleSubmit}>
             <Form.Group className="d-flex">
@@ -75,38 +74,3 @@ const Messages = () => {
 };
 
 export default Messages;
-
-{
-  /* {selectedUser ? (
-            <div className="d-flex flex-column-reverse">
-              {chatMessages.length > 0 ? (
-                chatMessages.map((message) => (
-                  <p
-                    key={message._id}
-                    className={`my-1 d-flex flex-column ${
-                      message.To === selectedUser && "align-self-end"
-                    }`}
-                  >
-                    <span
-                      className={`px-2 py-1 rounded-pill ${
-                        message.From === selectedUser
-                          ? "bg-primary  text-white"
-                          : "border border-success"
-                      }`}
-                    >
-                      {message.content}
-                    </span>
-                    <small>
-                      {new Date(message.createdAt).toLocaleString()}
-                    </small>
-                  </p>
-                ))
-              ) : (
-                <p>You are now connected!</p>
-              )}
-            </div>
-          ) : (
-            <p className="text-center">Open a chat to start a conversation</p>
-          )  
-          }           */
-}

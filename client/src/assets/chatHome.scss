@@ -80,3 +80,34 @@ body{
     overflow-wrap: break-word;
    
 }
+
+.error{
+    color: red;
+    font-size: 12px;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.error-box{
+    color: red;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+
+}
+
+.userImagePopover{
+    width: 250px;
+    height: 250px;
+    box-shadow: 0 0 10px #0e110d;
+    object-fit: cover;
+    
+}
+.ant-popover-title{
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    color: #42b72a;
+  }

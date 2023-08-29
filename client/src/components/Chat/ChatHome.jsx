@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
-import { Row, Col, Button, Image, Nav } from "react-bootstrap";
-import "./ChatHome.scss";
+import { Row, Button } from "react-bootstrap";
+import "../../assets/ChatHome.scss";
 import { Link } from "react-router-dom";
 import Users from "./Users";
 import Messages from "./Messages";
@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { SetSubscriptionMessages } from "../../store/slice/ChatSlice";
 import { NEW_MESSAGE } from "../../store/api/Subscription";
 import { notification } from "antd";
+import { setSelectedUser } from "../../store/slice/ChatSlice";
+// import { duration, max } from "moment";
 
 const ChatHome = () => {
   const user = localStorage.getItem("user");
@@ -34,7 +36,15 @@ const ChatHome = () => {
           icon: <i class="fa-sharp fa-regular fa-message fa-bounce"></i>,
           message: "Message From " + messageData.NewMessage.From,
           description: messageData.NewMessage.content,
-          duration: 4,
+          duration: 3,
+          role: "status",
+          style: {
+            border: "2px solid green",
+            color: "green",
+          },
+          onClick: (duration) => {
+            dispatch(setSelectedUser(messageData.NewMessage.From));
+          },
         });
       }
     }

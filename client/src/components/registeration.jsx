@@ -10,28 +10,35 @@ const Registration = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [Image, setImage] = useState("");
-
-  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();
 
-  const handleRegister = () => {
+  const handleRegister = (e) => {
+    e.preventDefault();
+
     console.log(Image);
     //Below is the fakepath of the image and change it to the image name
     const img = Image.split("\\")[2];
     console.log(img);
-    if (!name || !email || !password || !Image) {
-      alert("Please fill all the fields");
+    if (!name || !email || !password) {
+      setErrorMessage("Please fill all the fields");
+      return;
+    }
+    if (!email.includes("@")) {
+      setErrorMessage("Please enter a valid email");
       return;
     }
     if (password.length < 6) {
-      alert("Password must be atleast 6 characters long");
-      return;
-    } else if (!email.includes("@")) {
-      alert("Please enter a valid email");
+      setErrorMessage("Password must be atleast 6 characters long");
       return;
     }
-
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords do not match");
+      return;
+    }
+    // setErrorMessage = "";
     const userData = {
       name,
       email,
@@ -39,7 +46,8 @@ const Registration = () => {
       img,
     };
     dispatch(registerUser(userData));
-    navigate("/login");
+
+    // navigate("/login");
   };
 
   return (
@@ -56,7 +64,6 @@ const Registration = () => {
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-
         <div className="form-group">
           <label className="label">Email:</label>
           <input
@@ -79,6 +86,16 @@ const Registration = () => {
           />
         </div>
         <div className="form-group">
+          <label className="label">Confirm Password:</label>
+          <input
+            type="password"
+            className="input"
+            placeholder="Enter your password again"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+        </div>
+        <div className="form-group">
           <label className="label">Image:</label>
           <input
             type="file"
@@ -89,6 +106,9 @@ const Registration = () => {
           />
         </div>
 
+        <div className="error-box">
+          {errorMessage && <p className="error"> {errorMessage} </p>}
+        </div>
         <button className="button" onClick={handleRegister}>
           Register
         </button>

@@ -14,7 +14,6 @@ export class CreateUserInput {
   @Field({ nullable: true })
   img: string;
 
-  @IsAlphanumeric()
   @IsNotEmpty()
   @IsString()
   @Field(() => String, { description: 'Enter your name' })
