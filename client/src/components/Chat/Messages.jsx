@@ -62,7 +62,7 @@ const Messages = () => {
               />
 
               <Button type="submit" className=" ms-2">
-                <i class="fa-solid fa-paper-plane fa-beat"></i>
+                <i className="fa-solid fa-paper-plane fa-beat"></i>
               </Button>
             </Form.Group>
           </Form>

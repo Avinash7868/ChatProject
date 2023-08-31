@@ -16,7 +16,7 @@ const OtherUsers = () => {
   console.log("otherUsers", otherUsers);
   let otherUsersMarkup;
   if (!otherUsers) {
-    otherUsersMarkup = <p>Loading...</p>;
+    otherUsersMarkup = <p>No users...</p>;
   } else if (otherUsers.length === 0) {
     otherUsersMarkup = (
       <p className="d-flex justify-content-around">Loading...</p>
@@ -63,8 +63,14 @@ const OtherUsers = () => {
   }
   return (
     <>
-      <h2 className="text-center">Other Users</h2>
-      <ul className="list-group ">{otherUsersMarkup}</ul>
+      {otherUsers.length === 0 ? (
+        <p></p>
+      ) : (
+        <>
+          <h2 className="text-center">Other Users</h2>
+          <ul className="list-group ">{otherUsersMarkup}</ul>
+        </>
+      )}
     </>
   );
 };

@@ -8,7 +8,6 @@ import classNames from "classnames";
 import { Popover } from "antd";
 import moment from "moment";
 import OtherUsers from "./OtherUsers";
-// import OtherUsers from "./OtherUsers";
 
 const Users = () => {
   const { selectedUser } = useSelector((state) => state.chat);
@@ -28,9 +27,8 @@ const Users = () => {
   } else if (chatUsers.length === 0) {
     userMarkup = <p className="d-flex justify-content-around">Loading...</p>;
   } else if (chatUsers.length > 0) {
-    //Below code is for sorting users by latest message's createdAt
-
     //Below code is for displaying all users
+    //Below code is for sorting users by latest message's createdAt
     userMarkup = [...chatUsers]
       .sort((a, b) =>
         b.latestMessage.createdAt.localeCompare(a.latestMessage.createdAt)
@@ -88,11 +86,19 @@ const Users = () => {
   return (
     <>
       {/* Below code is for showing user Details in column */}
-      <Col xs={2} md={4} className="p-0 bg-noname ">
-        <h1 className="text-center">Chats</h1>
-        <ul className="list-group ">{userMarkup}</ul>
-        <OtherUsers />
-      </Col>
+      {chatUsers.length === 0 ? (
+        <Col xs={2} md={4} className="p-0 bg-noname ">
+          <OtherUsers />
+        </Col>
+      ) : (
+        <>
+          <Col xs={2} md={4} className="p-0 bg-noname ">
+            <h1 className="text-center">Chats</h1>
+            <ul className="list-group ">{userMarkup}</ul>
+            <OtherUsers />
+          </Col>
+        </>
+      )}
     </>
   );
 };

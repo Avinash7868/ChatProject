@@ -11,8 +11,6 @@ import { SetSubscriptionMessages } from "../../store/slice/ChatSlice";
 import { NEW_MESSAGE } from "../../store/api/Subscription";
 import { notification } from "antd";
 import { setSelectedUser } from "../../store/slice/ChatSlice";
-// import { duration, max } from "moment";
-// import OtherUsers from "./OtherUsers";
 
 const ChatHome = () => {
   const user = localStorage.getItem("user");
@@ -70,7 +68,6 @@ const ChatHome = () => {
 
       <Row className="m-0 home-row">
         <Users />
-        {/* <OtherUsers /> */}
         <Messages />
       </Row>
     </>
