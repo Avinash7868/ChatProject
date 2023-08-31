@@ -47,6 +47,7 @@ export const sendMessage = createAsyncThunk(
 //Intial State
 const initialState = {
   chatUsers: [],
+  otherUsers: [],
   chatMessages: [],
   selectedUser: null,
   loading: false,
@@ -68,7 +69,10 @@ const chatSlice = createSlice({
         (user) =>
           user.name === action.payload.To || user.name === action.payload.From
       );
-      userCopy[userIndex].latestMessage = action.payload;
+      if (userCopy[userIndex]) {
+        userCopy[userIndex].latestMessage = action.payload;
+      }
+
       state.chatUsers = userCopy;
       if (
         state.selectedUser === action.payload.To ||
@@ -86,7 +90,14 @@ const chatSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchAllChatUsers.fulfilled, (state, action) => {
-        state.chatUsers = action.payload;
+        //Below code is for filtering users who have latest message
+        state.chatUsers = action.payload.filter(
+          (user) => user.latestMessage !== null
+        );
+        //Below code is for filtering users who have no latest message
+        state.otherUsers = action.payload.filter(
+          (user) => user.latestMessage === null
+        );
         state.loading = false;
       })
       .addCase(fetchAllChatUsers.rejected, (state, action) => {

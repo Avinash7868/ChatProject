@@ -109,23 +109,18 @@ export class ChatResolver {
     return chat;
   }
 
-  //*****Below are all the subscription ***
-
-  // @Subscription(() => Chat, {
-  //   filter: (payload, variables) => {
-  //     if (
-  //       payload.loggedInUserUser === payload.NewMessage.To ||
-  //       payload.loggedInUserUser === payload.NewMessage.From
-  //     ) {
-  //       return true;
-  //     }
-  //     return false;
-  //   },
-  //   name: 'NewMessage',
-  // })
-  // NewMessage() {
-  //   return this.pubsub.asyncIterator(['NewMessage']);
+  //below is the mutation to delete message between two users
+  // @UseGuards(JwtAuthGuard)
+  // @Mutation(() => Boolean)
+  // async deleteMessageBetweenTwoUsers(
+  //   @Args('To') To: string,
+  //   @Args('From') From: string,
+  //   @Context() context: any,
+  // ) {
+  //   return this.chatService.deleteMessagesBetweenTwoUsers(From, To);
   // }
+
+  //*****Below are all the subscription *********
 
   // Below I am using withFilter to filter the messages so that only the sender and recipient can get the message if the sender and recipient are logged in
   @Subscription(() => Chat, {

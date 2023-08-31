@@ -12,6 +12,7 @@ import { NEW_MESSAGE } from "../../store/api/Subscription";
 import { notification } from "antd";
 import { setSelectedUser } from "../../store/slice/ChatSlice";
 // import { duration, max } from "moment";
+// import OtherUsers from "./OtherUsers";
 
 const ChatHome = () => {
   const user = localStorage.getItem("user");
@@ -42,7 +43,7 @@ const ChatHome = () => {
             border: "2px solid green",
             color: "green",
           },
-          onClick: (duration) => {
+          onClick: () => {
             dispatch(setSelectedUser(messageData.NewMessage.From));
           },
         });
@@ -67,8 +68,9 @@ const ChatHome = () => {
         </Link>
       </Row>
 
-      <Row className="m-0">
+      <Row className="m-0 home-row">
         <Users />
+        {/* <OtherUsers /> */}
         <Messages />
       </Row>
     </>

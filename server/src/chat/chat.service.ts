@@ -98,4 +98,13 @@ export class ChatService {
   SendMessage(CreateChatInput: CreateChatInput) {
     return this.chatModel.create(CreateChatInput);
   }
+
+  deleteMessagesBetweenTwoUsers(From: string, To: string) {
+    return this.chatModel.deleteMany({
+      $or: [
+        { $and: [{ From: From }, { To: To }] },
+        { $and: [{ From: To }, { To: From }] },
+      ],
+    });
+  }
 }
