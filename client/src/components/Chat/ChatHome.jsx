@@ -1,6 +1,6 @@
 import React from "react";
-import { useEffect } from "react";
-import { Row, Button } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { Row, Button, Dropdown } from "react-bootstrap";
 import "../../assets/ChatHome.scss";
 import { Link } from "react-router-dom";
 import Users from "./Users";
@@ -54,22 +54,49 @@ const ChatHome = () => {
     localStorage.removeItem("user");
     window.location.href = "/login";
   };
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
     <>
       {contextHolder}
-      <Row className=" d-block-flex mb-2 bg-success m-0">
+      {/* <Row className=" d-block-flex mb-2 bg-success m-0">
         <Link>
           <Button variant="" onClick={handleLogout}>
             Logout
           </Button>
         </Link>
+      </Row> */}
+      <Row className="d-block-flex mb-2 bg-success m-0">
+        <Dropdown className="home-drpodown">
+          <Dropdown.Toggle
+            variant="success"
+            id="dropdown-basic"
+            className="bg-success"
+          >
+            <i className="fa-solid fa-user fa-beat"></i>
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+            <Dropdown.Item href="#/action-1">Profile</Dropdown.Item>
+            <Dropdown.Item href="#/action-2">Settings</Dropdown.Item>
+            <Dropdown.Item href="#/action-3">Help</Dropdown.Item>
+            <Dropdown.Item href="#/action-3" onClick={handleLogout}>
+              Logout
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
       </Row>
 
-      <Row className="m-0 home-row">
-        <Users />
-        <Messages />
-      </Row>
+      {/* <Row className="m-0 home-row"> */}
+      <div className="home-row ">
+        <div style={{ width: "30%" }}>
+          <Users />
+        </div>
+        <div style={{ width: "70%" }}>
+          <Messages />
+        </div>
+        {/* </Row> */}
+      </div>
     </>
   );
 };

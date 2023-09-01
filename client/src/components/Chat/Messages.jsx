@@ -20,7 +20,6 @@ const Messages = () => {
     setContent("");
     dispatch(sendMessage({ content, To: selectedUser }));
   };
-
   //Below code is for fetching all messages between two users
   useEffect(() => {
     if (selectedUser) {
@@ -48,7 +47,7 @@ const Messages = () => {
 
   return (
     <>
-      <Col xs={10} md={8}>
+      <Col className="message-div">
         <div className="messages-box d-felx">{messageMarkup}</div>
         <div className="px-3 py-2">
           <Form onSubmit={handleSubmit}>

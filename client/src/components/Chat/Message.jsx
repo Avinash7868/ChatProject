@@ -26,14 +26,18 @@ const Message = ({ message, mykey }) => {
         })}
       >
         <div
-          className={classNames("py-1 px-3 ", {
+          style={{ flexWrap: "wrap" }}
+          className={classNames("py-1 px-3 message-area  ", {
             "bg-primary": sent,
             "bg-adarsh2": received,
           })}
         >
           <p
-            className={classNames({ "text-white message-content": sent })}
+            className={classNames({
+              "text-white message-content ": sent,
+            })}
             key={message._id}
+            style={{ wordBreak: "break-word" }}
           >
             {message.content}
           </p>

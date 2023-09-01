@@ -1,4 +1,4 @@
-// @import '../../../node_modules/bootstrap/scss/bootstrap.scss';
+
 .bg-adarsh{
     background-color: rgb(143, 141, 141);
 }
@@ -12,7 +12,17 @@
     
 }
 
+.user-div{
+    border-bottom: 3px solid rgb(248, 246, 246);
+
+    scroll-behavior: smooth;
+    overflow: hidden;
+    scrollbar-width: none;
+   
+}
+
 .user-div:hover{
+
     background-color: rgb(250,250,260 )
 }
 
@@ -29,15 +39,10 @@ body{
     background-color: rgb(215, 210, 210);
 }
 
-// .messages-box{
-//     height: 70vh;
-//     overflow-y: auto;
-//     overflow-wrap: break-word;
-//     overflow-x: hidden;
-// }
 .messages-box{
-    // height: 70vh;
+   
     height: 80vh;
+   
     overflow-y: scroll;
     overflow-wrap: break-word;
     overflow-x: hidden;
@@ -77,8 +82,10 @@ body{
 }
 
 .message-content{
-    font-size: 14px;   
+    font-size: 14px; 
+  
     overflow-wrap: break-word;
+   
    
 }
 
@@ -121,11 +128,45 @@ body{
     margin-bottom: 0.25rem;
 }
 
-.home-row{
+
+.home-drpodown{
     margin-top: 1rem;
-    margin-bottom: 1rem;
-//     overflow-y: auto;
-//     overflow-wrap: break-word;
-//     overflow-x: hidden;
+    margin-bottom: 0.5rem;
+    direction: rtl;
 }
 
+.users-div{
+//    border: 2px solid #d2decf;
+    // border-radius: 10px;
+    // padding: 0.5rem;
+    // margin-bottom: 0.5rem;
+    width: auto;
+    height: 92vh;
+    // display: flex;
+    overflow: scroll;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    // flex-direction: row;
+}
+
+.home-row{
+    display: flex;
+    flex-direction: row;   
+}
+
+.message-area{
+    width: auto;
+    max-width: 50%;
+    height: auto;
+    // margin-top: 1rem;
+    border-radius: 10px;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    // flex-direction: row;
+    // justify-content: space-between;
+    align-items: flex-end;
+}
