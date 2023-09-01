@@ -49,6 +49,7 @@ const initialState = {
   chatUsers: [],
   otherUsers: [],
   chatMessages: [],
+  allChatUsers: [],
   selectedUser: null,
   loading: false,
   error: null,
@@ -90,6 +91,8 @@ const chatSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchAllChatUsers.fulfilled, (state, action) => {
+        state.allChatUsers = [...action.payload];
+
         //Below code is for filtering users who have latest message
         state.chatUsers = action.payload.filter(
           (user) => user.latestMessage !== null

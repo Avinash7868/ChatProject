@@ -2,7 +2,7 @@ import React from "react";
 import { fetchAllChatUsers } from "../../store/slice/ChatSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, Image } from "react-bootstrap";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { setSelectedUser } from "../../store/slice/ChatSlice";
 import classNames from "classnames";
 import { Popover } from "antd";
@@ -50,7 +50,7 @@ const Users = () => {
               className={classNames(
                 "user-div d-flex justify-content-centre p-3",
                 {
-                  "bg-adarsh bg-hovver": selectedUser === user.name,
+                  "bg-selectedUser": selectedUser === user.name,
                 }
               )}
               key={user.name}

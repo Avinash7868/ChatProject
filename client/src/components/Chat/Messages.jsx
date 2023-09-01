@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { fetchAllMessagesBetweenTwoUsers } from "../../store/slice/ChatSlice";
 import { sendMessage } from "../../store/slice/ChatSlice";
-
+import { Empty } from "antd";
 const Messages = () => {
   const { chatMessages } = useSelector((state) => state.chat);
   const { selectedUser } = useSelector((state) => state.chat);
@@ -35,7 +35,10 @@ const Messages = () => {
       <p className="info-text">Open a chat to start a conversation</p>
     );
   } else if (chatMessages.length === 0) {
-    messageMarkup = <p className="info-text">No messages yet</p>;
+    // messageMarkup = <p className="info-text">No messages yet</p>;
+    messageMarkup = (
+      <Empty description="No messages yet" className="no-message" />
+    );
   } else if (chatMessages.length > 0) {
     {
       /* Below code is for calling messages and mapping it */

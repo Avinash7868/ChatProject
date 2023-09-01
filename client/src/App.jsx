@@ -6,7 +6,6 @@ import UserData from "./components/userData";
 import Login from "./components/login";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import ProtectLogin from "./components/ProtectLogin";
-import Subscription from "./components/sub";
 import ChatHome from "./components/Chat/ChatHome";
 
 const App = () => {
@@ -15,7 +14,6 @@ const App = () => {
       <>
         <Routes>
           <Route path="/" element={<Registeration />} />
-          <Route path="Subscription" element={<Subscription />} />
           <Route element={<ProtectLogin />}>
             <Route path="login" element={<Login />} />
           </Route>

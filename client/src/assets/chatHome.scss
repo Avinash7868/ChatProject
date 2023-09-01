@@ -1,7 +1,4 @@
-//Global styles for chat home page
-.bg-adarsh{
-    background-color: rgb(143, 141, 141);
-}
+
 .text-greeen{
     color: #42b72a;
     font-weight: bold;
@@ -161,3 +158,22 @@ body{
 //     background-color: #42b72a;
 //     color: white;
 // }
+
+.bg-selectedUser{
+    background-color:rgb(232, 238, 243);
+    // box-shadow: 0 0 10px #0e110d; 
+    // border-radius: 10px;
+}
+
+.bg-selectedUser:hover{
+    background-color:rgb(232, 238, 243); 
+}
+
+.no-message{
+    margin-top: 35vh;
+  
+}
+
+.search-input{
+    width: 40%;
+}

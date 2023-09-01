@@ -1,20 +1,25 @@
-import React from "react";
+import React, { useMemo, useCallback } from "react";
 import { useEffect, useState } from "react";
-import { Row, Button, Dropdown } from "react-bootstrap";
+import { Dropdown, Overlay } from "react-bootstrap";
+// import{Popover} from 'react-bootstrap'
 import "../../assets/ChatHome.scss";
-import { Link } from "react-router-dom";
 import Users from "./Users";
 import Messages from "./Messages";
 import { useSubscription } from "@apollo/client";
 import { useDispatch, useSelector } from "react-redux";
 import { SetSubscriptionMessages } from "../../store/slice/ChatSlice";
 import { NEW_MESSAGE } from "../../store/api/Subscription";
-import { notification } from "antd";
+import { notification, Input, Popover } from "antd";
 import { setSelectedUser } from "../../store/slice/ChatSlice";
 
 const ChatHome = () => {
+  const { allChatUsers } = useSelector((state) => state.chat);
+
+  const [search, setSearch] = useState("");
+  console.log(search, "search");
   const user = localStorage.getItem("user");
   const [api, contextHolder] = notification.useNotification();
+  const [filteredUsers, setFilteredUsers] = useState([]);
   console.log(user, "user");
   const { data: messageData, error: messageError } = useSubscription(
     NEW_MESSAGE,
@@ -49,43 +54,218 @@ const ChatHome = () => {
     }
   }, [messageData, messageError]);
 
+  // Function to toggle the popover
+  // const togglePopover = (event) => {
+  //   setShowPopover(!showPopover);
+  //   setTarget(event.target);
+  // };
+  //Shivam************************************
+  const handleSearch = (value) => {
+    setSearch(value);
+  };
+  useEffect(() => {
+    if (search.trim() === "") {
+      setFilteredUsers([]); // Clear filtered users when search is empty
+    } else {
+      // Filter users whose names contain the search input (case-insensitive)
+      const filtered = allChatUsers.filter((user) =>
+        user.name.toLowerCase().includes(search.toLowerCase())
+      );
+      console.log("filtered Users", filtered);
+      setFilteredUsers(filtered);
+    }
+  }, [search, allChatUsers]);
+  console.log("filteredUsers state ", filteredUsers);
+  const handlePopoverClick = () => {
+    // Toggle the popover visibility
+    setFilteredUsers([]); // Clear filtered users when the popover is clicked
+  };
+
+  //************************************************************ */
+  const closeModal = () => {
+    setShowModal(false);
+  };
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     window.location.href = "/login";
   };
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-
+  // useEffect(() => {
+  //   if (search.trim() === "") {
+  //     // If the search input is empty, show all users
+  //     setFilteredUsers(allChatUsers);
+  //   } else {
+  //     // Filter users whose names contain the search input (case-insensitive)
+  //     const filtered = allChatUsers.filter((user) =>
+  //       user.name.toLowerCase().includes(search.toLowerCase())
+  //     );
+  //     setFilteredUsers(filtered);
+  //   }
+  // }, [search, allChatUsers]);
   return (
     <>
       {contextHolder}
-      <Row className="d-block-flex mb-2 bg-success m-0">
-        <Dropdown className="home-drpodown">
-          <Dropdown.Toggle
-            variant="success"
-            id="dropdown-basic"
-            className="bg-success"
+      <div
+        className="home-header"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          backgroundColor: "green",
+        }}
+      >
+        <div
+          style={{
+            marginLeft: "25px",
+
+            width: "50%",
+          }}
+        >
+          <Input
+            placeholder="Search users"
+            value={search}
+            onChange={(e) => handleSearch(e.target.value)}
+            style={{ width: "40%" }}
+          />
+          {filteredUsers.length > 0 && (
+            <Popover
+              content={
+                <div>
+                  {filteredUsers.map((filteredUser) => {
+                    return (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          // justifyContent: "space-between",
+                          padding: "5px 0",
+                        }}
+                        key={filteredUser.name}
+                      >
+                        <img
+                          src={filteredUser.img || "gravtar.png"}
+                          alt="User"
+                          style={{
+                            height: 50,
+                            width: 50,
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                            marginRight: 10,
+                          }}
+                        />
+                        <p
+                          key={filteredUser.name}
+                          role="button"
+                          onClick={() => {
+                            dispatch(setSelectedUser(filteredUser.name));
+                            setFilteredUsers([]); // Clear filtered users when a user is clicked
+                            setSearch("");
+                          }}
+                        >
+                          {filteredUser.name}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              }
+              title="All Users"
+              trigger="click"
+              open={filteredUsers.length > 0}
+              placement="bottomRight"
+              onClick={handlePopoverClick}
+            ></Popover>
+          )}
+          {/* <input
+            type="text"
+            placeholder="Search"
+            className="search-input"
+            onChange={handleclick}
+            // onFocus={togglePopover} // Show popover when input is focused
+            // onBlur={() => setShowPopover(false)} // Hide popover when input is blurred
+          /> */}
+          {/* <Overlay
+            show={showPopover}
+            target={target}
+            placement="bottom"
+            transition={false}
           >
-            <i className="fa-solid fa-user fa-beat"></i>
-          </Dropdown.Toggle>
+            {({ placement, arrowProps, show: _show, popper, ...props }) => (
+              <div
+                {...props}
+                style={{
+                  backgroundColor: "green",
+                  padding: "2px 10px",
+                  color: "white",
+                  borderRadius: 3,
+                  ...props.style,
+                }}
+              >
+                {filteredUsers.map((user) => (
+                  <div
+                    key={user.name}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
 
-          <Dropdown.Menu>
-            <p className="dropdown-header">{user}</p>
-            {/* <Dropdown.Item  >{user}</Dropdown.Item> */}
-            {/* <Dropdown.Item href="#/action-2">Settings</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">Help</Dropdown.Item> */}
-            <Dropdown.Item
-              href="#/action-3"
-              className="dropdown-logout"
-              onClick={handleLogout}
+                      padding: "5px 0",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                      role="button"
+                      onClick={console.log(user.name, "on click user.name")}
+                    >
+                      <img
+                        src={user.img || "gravtar.png"}
+                        alt="User"
+                        style={{
+                          height: 30,
+                          width: 30,
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                          marginRight: 10,
+                        }}
+                      />
+                      <p style={{ margin: 0 }}>{user.name}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </Overlay> */}
+        </div>
+        <div>
+          <Dropdown className="home-drpodown">
+            <Dropdown.Toggle
+              variant="success"
+              id="dropdown-basic"
+              className="bg-success"
             >
-              Logout
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </Row>
+              <i className="fa-solid fa-user fa-beat"></i>
+            </Dropdown.Toggle>
 
-      {/* <Row className="m-0 home-row"> */}
+            <Dropdown.Menu>
+              <p className="dropdown-header">{user}</p>
+              {/* <Dropdown.Item  >{user}</Dropdown.Item> */}
+              {/* <Dropdown.Item href="#/action-2">Settings</Dropdown.Item>
+            <Dropdown.Item href="#/action-3">Help</Dropdown.Item> */}
+              <Dropdown.Item
+                href="#/action-3"
+                className="dropdown-logout"
+                onClick={handleLogout}
+              >
+                Logout
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+      </div>
+
       <div className="home-row ">
         <div style={{ width: "30%" }}>
           <Users />
