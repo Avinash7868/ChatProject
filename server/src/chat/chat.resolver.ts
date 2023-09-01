@@ -109,7 +109,7 @@ export class ChatResolver {
     return chat;
   }
 
-  //below is the mutation to delete message between two users
+  // below is the mutation to delete message between two users
   // @UseGuards(JwtAuthGuard)
   // @Mutation(() => Boolean)
   // async deleteMessageBetweenTwoUsers(

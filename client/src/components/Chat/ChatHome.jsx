@@ -59,13 +59,6 @@ const ChatHome = () => {
   return (
     <>
       {contextHolder}
-      {/* <Row className=" d-block-flex mb-2 bg-success m-0">
-        <Link>
-          <Button variant="" onClick={handleLogout}>
-            Logout
-          </Button>
-        </Link>
-      </Row> */}
       <Row className="d-block-flex mb-2 bg-success m-0">
         <Dropdown className="home-drpodown">
           <Dropdown.Toggle
@@ -77,10 +70,15 @@ const ChatHome = () => {
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
-            <Dropdown.Item href="#/action-1">Profile</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">Settings</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">Help</Dropdown.Item>
-            <Dropdown.Item href="#/action-3" onClick={handleLogout}>
+            <p className="dropdown-header">{user}</p>
+            {/* <Dropdown.Item  >{user}</Dropdown.Item> */}
+            {/* <Dropdown.Item href="#/action-2">Settings</Dropdown.Item>
+            <Dropdown.Item href="#/action-3">Help</Dropdown.Item> */}
+            <Dropdown.Item
+              href="#/action-3"
+              className="dropdown-logout"
+              onClick={handleLogout}
+            >
               Logout
             </Dropdown.Item>
           </Dropdown.Menu>
