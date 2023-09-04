@@ -1,7 +1,6 @@
-import React, { useMemo, useCallback } from "react";
+import React from "react";
 import { useEffect, useState } from "react";
-import { Dropdown, Overlay } from "react-bootstrap";
-// import{Popover} from 'react-bootstrap'
+import { Dropdown } from "react-bootstrap";
 import "../../assets/ChatHome.scss";
 import Users from "./Users";
 import Messages from "./Messages";
@@ -54,12 +53,6 @@ const ChatHome = () => {
     }
   }, [messageData, messageError]);
 
-  // Function to toggle the popover
-  // const togglePopover = (event) => {
-  //   setShowPopover(!showPopover);
-  //   setTarget(event.target);
-  // };
-  //Shivam************************************
   const handleSearch = (value) => {
     setSearch(value);
   };
@@ -81,7 +74,6 @@ const ChatHome = () => {
     setFilteredUsers([]); // Clear filtered users when the popover is clicked
   };
 
-  //************************************************************ */
   const closeModal = () => {
     setShowModal(false);
   };
@@ -90,18 +82,7 @@ const ChatHome = () => {
     localStorage.removeItem("user");
     window.location.href = "/login";
   };
-  // useEffect(() => {
-  //   if (search.trim() === "") {
-  //     // If the search input is empty, show all users
-  //     setFilteredUsers(allChatUsers);
-  //   } else {
-  //     // Filter users whose names contain the search input (case-insensitive)
-  //     const filtered = allChatUsers.filter((user) =>
-  //       user.name.toLowerCase().includes(search.toLowerCase())
-  //     );
-  //     setFilteredUsers(filtered);
-  //   }
-  // }, [search, allChatUsers]);
+
   return (
     <>
       {contextHolder}
@@ -125,7 +106,8 @@ const ChatHome = () => {
             placeholder="Search users"
             value={search}
             onChange={(e) => handleSearch(e.target.value)}
-            style={{ width: "40%" }}
+            style={{ width: "30%" }}
+            allowClear={true}
           />
           {filteredUsers.length > 0 && (
             <Popover
@@ -176,68 +158,6 @@ const ChatHome = () => {
               onClick={handlePopoverClick}
             ></Popover>
           )}
-          {/* <input
-            type="text"
-            placeholder="Search"
-            className="search-input"
-            onChange={handleclick}
-            // onFocus={togglePopover} // Show popover when input is focused
-            // onBlur={() => setShowPopover(false)} // Hide popover when input is blurred
-          /> */}
-          {/* <Overlay
-            show={showPopover}
-            target={target}
-            placement="bottom"
-            transition={false}
-          >
-            {({ placement, arrowProps, show: _show, popper, ...props }) => (
-              <div
-                {...props}
-                style={{
-                  backgroundColor: "green",
-                  padding: "2px 10px",
-                  color: "white",
-                  borderRadius: 3,
-                  ...props.style,
-                }}
-              >
-                {filteredUsers.map((user) => (
-                  <div
-                    key={user.name}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-
-                      padding: "5px 0",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                      role="button"
-                      onClick={console.log(user.name, "on click user.name")}
-                    >
-                      <img
-                        src={user.img || "gravtar.png"}
-                        alt="User"
-                        style={{
-                          height: 30,
-                          width: 30,
-                          borderRadius: "50%",
-                          objectFit: "cover",
-                          marginRight: 10,
-                        }}
-                      />
-                      <p style={{ margin: 0 }}>{user.name}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </Overlay> */}
         </div>
         <div>
           <Dropdown className="home-drpodown">
@@ -273,7 +193,6 @@ const ChatHome = () => {
         <div style={{ width: "70%" }}>
           <Messages />
         </div>
-        {/* </Row> */}
       </div>
     </>
   );
