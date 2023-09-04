@@ -14,11 +14,11 @@ import { setSelectedUser } from "../../store/slice/ChatSlice";
 const ChatHome = () => {
   const { allChatUsers } = useSelector((state) => state.chat);
 
-  const [search, setSearch] = useState("");
-  console.log(search, "search");
+  // const [search, setSearch] = useState("");
+  // console.log(search, "search");
   const user = localStorage.getItem("user");
   const [api, contextHolder] = notification.useNotification();
-  const [filteredUsers, setFilteredUsers] = useState([]);
+  // const [filteredUsers, setFilteredUsers] = useState([]);
   console.log(user, "user");
   const { data: messageData, error: messageError } = useSubscription(
     NEW_MESSAGE,
@@ -53,30 +53,27 @@ const ChatHome = () => {
     }
   }, [messageData, messageError]);
 
-  const handleSearch = (value) => {
-    setSearch(value);
-  };
-  useEffect(() => {
-    if (search.trim() === "") {
-      setFilteredUsers([]); // Clear filtered users when search is empty
-    } else {
-      // Filter users whose names contain the search input (case-insensitive)
-      const filtered = allChatUsers.filter((user) =>
-        user.name.toLowerCase().includes(search.toLowerCase())
-      );
-      console.log("filtered Users", filtered);
-      setFilteredUsers(filtered);
-    }
-  }, [search, allChatUsers]);
-  console.log("filteredUsers state ", filteredUsers);
+  // const handleSearch = (value) => {
+  //   setSearch(value);
+  // };
+  // useEffect(() => {
+  //   if (search.trim() === "") {
+  //     setFilteredUsers([]); // Clear filtered users when search is empty
+  //   } else {
+  //     // Filter users whose names contain the search input (case-insensitive)
+  //     const filtered = allChatUsers.filter((user) =>
+  //       user.name.toLowerCase().includes(search.toLowerCase())
+  //     );
+  //     console.log("filtered Users", filtered);
+  //     setFilteredUsers(filtered);
+  //   }
+  // }, [search, allChatUsers]);
+  // console.log("filteredUsers state ", filteredUsers);
   const handlePopoverClick = () => {
     // Toggle the popover visibility
     setFilteredUsers([]); // Clear filtered users when the popover is clicked
   };
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -89,76 +86,9 @@ const ChatHome = () => {
       <div
         className="home-header"
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
           backgroundColor: "green",
         }}
       >
-        <div
-          style={{
-            marginLeft: "25px",
-
-            width: "50%",
-          }}
-        >
-          <Input
-            placeholder="Search users"
-            value={search}
-            onChange={(e) => handleSearch(e.target.value)}
-            style={{ width: "30%" }}
-            allowClear={true}
-          />
-          {filteredUsers.length > 0 && (
-            <Popover
-              content={
-                <div>
-                  {filteredUsers.map((filteredUser) => {
-                    return (
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          // justifyContent: "space-between",
-                          padding: "5px 0",
-                        }}
-                        key={filteredUser.name}
-                      >
-                        <img
-                          src={filteredUser.img || "gravtar.png"}
-                          alt="User"
-                          style={{
-                            height: 50,
-                            width: 50,
-                            borderRadius: "50%",
-                            objectFit: "cover",
-                            marginRight: 10,
-                          }}
-                        />
-                        <p
-                          key={filteredUser.name}
-                          role="button"
-                          onClick={() => {
-                            dispatch(setSelectedUser(filteredUser.name));
-                            setFilteredUsers([]); // Clear filtered users when a user is clicked
-                            setSearch("");
-                          }}
-                        >
-                          {filteredUser.name}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </div>
-              }
-              title="All Users"
-              trigger="click"
-              open={filteredUsers.length > 0}
-              placement="bottomRight"
-              onClick={handlePopoverClick}
-            ></Popover>
-          )}
-        </div>
         <div>
           <Dropdown className="home-drpodown">
             <Dropdown.Toggle

@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { apolloClient } from "../../graphql/apolloClient";
 import { gql } from "@apollo/client";
 import jwtDecode from "jwt-decode";
-// import { v4 as uuidv4 } from "uuid";
 
 // Define the GraphQL query to fetch all the users
 const QUERY_ALL_USERS = gql`

@@ -2,16 +2,21 @@ import React from "react";
 import { fetchAllChatUsers } from "../../store/slice/ChatSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { Col, Image } from "react-bootstrap";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { setSelectedUser } from "../../store/slice/ChatSlice";
 import classNames from "classnames";
 import { Popover } from "antd";
 import moment from "moment";
 import OtherUsers from "./OtherUsers";
+import { notification, Input } from "antd";
+// import { useDispatch, useSelector } from "react-redux";
 
 const Users = () => {
+  const { allChatUsers } = useSelector((state) => state.chat);
+  const [search, setSearch] = useState("");
   const { selectedUser } = useSelector((state) => state.chat);
   const { chatUsers } = useSelector((state) => state.chat);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const dispatch = useDispatch();
   console.log("chatUsers", chatUsers);
   let message = "";
@@ -19,6 +24,26 @@ const Users = () => {
   useEffect(() => {
     dispatch(fetchAllChatUsers());
   }, [dispatch]);
+  const handleSearch = (value) => {
+    setSearch(value);
+  };
+  useEffect(() => {
+    if (search.trim() === "") {
+      setFilteredUsers([]); // Clear filtered users when search is empty
+    } else {
+      // Filter users whose names contain the search input (case-insensitive)
+      const filtered = allChatUsers.filter((user) =>
+        user.name.toLowerCase().includes(search.toLowerCase())
+      );
+      console.log("filtered Users", filtered);
+      setFilteredUsers(filtered);
+    }
+  }, [search, allChatUsers]);
+  console.log("filteredUsers state ", filteredUsers);
+  const handlePopoverClick = () => {
+    // Toggle the popover visibility
+    setFilteredUsers([]); // Clear filtered users when the popover is clicked
+  };
 
   //Below code is for selecting a user and displaying messages and user details
   let userMarkup;
@@ -27,11 +52,6 @@ const Users = () => {
   } else if (chatUsers.length === 0) {
     userMarkup = <p className="d-flex justify-content-around">Loading...</p>;
   } else if (chatUsers.length > 0) {
-    // console.log(chatUsers[0].latestMessage, "user.latestMessage.createdAt");
-    //Below code is for displaying all users
-    //Below code is for sorting users by latest message's createdAt
-    // let messageText = chatUsers.latestMessage.content;
-    // console.log(messageText, "messageText");
     userMarkup = [...chatUsers]
 
       .sort((a, b) =>
@@ -63,6 +83,7 @@ const Users = () => {
                       <Image
                         src={user.img || "gravtar.png"}
                         className="userImagePopover"
+                        loading="lazy"
                       />
                     </p>
                     <p>Living</p>
@@ -100,6 +121,7 @@ const Users = () => {
         )
       );
   }
+
   return (
     <div className="users-div">
       {/* Below code is for showing user Details in column */}
@@ -107,7 +129,76 @@ const Users = () => {
         <OtherUsers />
       ) : (
         <div>
-          <h1 className="text-center">Chats</h1>
+          <div
+            style={{
+              display: "flex",
+              width: "100%",
+            }}
+          >
+            <h3 className="chats-heading">Chats</h3>
+            <Input
+              placeholder="Search users"
+              value={search}
+              onChange={(e) => handleSearch(e.target.value)}
+              style={{
+                width: "60%",
+                marginRight: "auto",
+                marginTop: "auto",
+                marginBottom: "auto",
+              }}
+              allowClear={true}
+            />
+            {filteredUsers.length > 0 && (
+              <Popover
+                content={
+                  <div>
+                    {filteredUsers.map((filteredUser) => {
+                      return (
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            // justifyContent: "space-between",
+                            padding: "5px 0",
+                          }}
+                          key={filteredUser.name}
+                        >
+                          <img
+                            src={filteredUser.img || "gravtar.png"}
+                            alt="User"
+                            style={{
+                              height: 50,
+                              width: 50,
+                              borderRadius: "50%",
+                              objectFit: "cover",
+                              marginRight: 10,
+                            }}
+                          />
+                          <p
+                            key={filteredUser.name}
+                            role="button"
+                            onClick={() => {
+                              dispatch(setSelectedUser(filteredUser.name));
+                              setFilteredUsers([]); // Clear filtered users when a user is clicked
+                              setSearch("");
+                            }}
+                          >
+                            {filteredUser.name}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                }
+                title="All Users"
+                trigger="click"
+                open={filteredUsers.length > 0}
+                placement="bottomRight"
+                onClick={handlePopoverClick}
+              ></Popover>
+            )}
+          </div>
+
           <ul className="list-group ">{userMarkup}</ul>
           <OtherUsers />
         </div>

@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { apolloClient } from "../../graphql/apolloClient";
-import { gql } from "@apollo/client";
+// import { gql } from "@apollo/client";
 import {
   QUERY_ALL_CHAT_USERS,
   QUERY_ALL_MESSAGES_BETWEEN_TWO_USERS,
   MUTATION_SEND_MESSAGE,
 } from "../api/Chat";
 
-// ******************************************actions********************************
+// ****************************actions********************************
 export const fetchAllChatUsers = createAsyncThunk(
   "chat/fetchAllChatUsers",
   async () => {
@@ -63,25 +63,42 @@ const chatSlice = createSlice({
     setSelectedUser: (state, action) => {
       state.selectedUser = action.payload;
     },
+    //Below code is for setting subscription messages in chats and initial state
     SetSubscriptionMessages: (state, action) => {
       const userCopy = [...state.chatUsers];
 
+      //Below code is to find the index of user who sent the message
       const userIndex = userCopy.findIndex(
         (user) =>
           user.name === action.payload.To || user.name === action.payload.From
       );
+
+      //Below code is to check if the user is already in chatUsers array or not
       if (userCopy[userIndex]) {
         userCopy[userIndex].latestMessage = action.payload;
       }
+      //Below code is to check if the user is already in otherUsers array or not
+      else {
+        const otherUserIndex = state.otherUsers.findIndex(
+          (user) =>
+            user.name === action.payload.To || user.name === action.payload.From
+        );
+
+        state.otherUsers[otherUserIndex].latestMessage = action.payload;
+        userCopy.push(state.otherUsers[otherUserIndex]);
+        state.otherUsers.splice(otherUserIndex, 1);
+      }
 
       state.chatUsers = userCopy;
+
+      //Below code is to check if the user is selected or not
       if (
         state.selectedUser === action.payload.To ||
         state.selectedUser === action.payload.From
       ) {
         state.chatMessages = [...state.chatMessages, action.payload];
       }
-      // state.Sub = action.payload;
+
       state.loading = false;
     },
   },
