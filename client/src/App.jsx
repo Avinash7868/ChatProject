@@ -2,7 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import Registeration from "./components/registeration";
 import { ApolloProvider } from "@apollo/client";
 import { apolloClient } from "./graphql/apolloClient";
-import UserData from "./components/userData";
 import Login from "./components/login";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import ProtectLogin from "./components/ProtectLogin";
