@@ -15,7 +15,7 @@ const Messages = () => {
   const { selectedUser } = useSelector((state) => state.chat);
   const [content, setContent] = useState("");
   const [showEmojiPicker, setShowEmojiPicker] = useState(false); // Track emoji picker visibility
-  // const messageInputRef = useRef(null); // Reference to the message input field
+
   const dispatch = useDispatch();
   console.log("Selected User:-", selectedUser);
   console.log(chatMessages);
@@ -80,7 +80,6 @@ const Messages = () => {
                 className="rounded-pill p-4"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
-                // ref={messageInputRef}
               />
               <Popover
                 content={
