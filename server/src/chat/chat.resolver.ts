@@ -14,7 +14,6 @@ import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/auth.guard';
 import { UserInputError } from '@nestjs/apollo';
 import { PubSub, withFilter } from 'graphql-subscriptions';
-// import { JwtSubscriptionsGuard } from '../auth/subsription.auth.guard';
 
 @Resolver(() => Chat)
 export class ChatResolver {
