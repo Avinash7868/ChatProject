@@ -8,7 +8,7 @@ import classNames from "classnames";
 import { Popover } from "antd";
 import moment from "moment";
 import OtherUsers from "./OtherUsers";
-import { notification, Input } from "antd";
+import { Input } from "antd";
 // import { useDispatch, useSelector } from "react-redux";
 
 const Users = () => {
