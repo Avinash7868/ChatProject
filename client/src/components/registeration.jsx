@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { registerUser } from "../store/slice/userSlice";
 import { Link } from "react-router-dom";
 import { Form, Input, Button, Typography, Alert } from "antd";
-import "../assets/Registration.scss";
+import "../assets/Registration.css";
 
 const { Title } = Typography;
 

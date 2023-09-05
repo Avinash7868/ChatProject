@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { Dropdown } from "react-bootstrap";
-import "./ChatHome.css";
+import "../../assets/ChatHome.css";
 import Users from "./Users";
 import Messages from "./Messages";
 import { useSubscription } from "@apollo/client";
